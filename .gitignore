@@ -1,13 +1,20 @@
-# Go binaries
-services/streaming-service/main
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+ios/
+android/
+linux/
+macos/
+windows/
+web/
+*.iml
+.idea/
 
-# Flutter / Dart
-mobile_app/.dart_tool/
-mobile_app/build/
-mobile_app/.flutter-plugins
-mobile_app/.flutter-plugins-dependencies
-mobile_app/.packages
-
-# System files
-.DS_Store
-.env
+# Docker/K8s
+*.log
+node_modules/
