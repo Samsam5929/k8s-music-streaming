@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: streaming-container
-        image: streaming-service:v12
-        imagePullPolicy: Never
+        image: streaming-service:v26
+        imagePullPolicy: IfNotPresent
         env:
         - name: MINIO_ENDPOINT
           value: "minio-service:9000" # Имя сервиса MinIO внутри K8s
