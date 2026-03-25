@@ -3,6 +3,9 @@
 
 Микросервисная платформа для стриминга музыки, развернутая в **Kubernetes (Minikube)**.
 
+Видеообзор функционала
+https://drive.google.com/file/d/1nwXkBFwAEU7qHmx9u4TE_R0YojOstMjm/view?usp=sharing
+
 ---
 
 ##  Основные компоненты
