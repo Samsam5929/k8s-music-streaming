@@ -1,64 +1,74 @@
-# Microservices Music Streaming Platform on Kubernetes
+ K8s Music Streaming Platform
 
-Итоговый проект: Клиент-серверная платформа для стриминга музыки с использованием микросервисной архитектуры и оркестрации Kubernetes.
+Микросервисная платформа для стриминга музыки, развернутая в Kubernetes (Minikube).
 
-## 🚀 Архитектура проекта
-*   **Backend:** Go (Golang) — сервис стриминга, работающий с S3 и SQL.
-*   **Database:** PostgreSQL — хранение метаданных треков (название, автор, ключи файлов).
-*   **Storage:** MinIO (S3-compatible) — хранилище аудиофайлов (.mp3).
-*   **Orchestration:** Kubernetes (Minikube) — управление контейнерами и сетью.
-*   **Frontend:** Flutter (Web/Mobile) — кроссплатформенный плеер.
+ Что внутри?
 
----
+Backend (Go): Управление треками, стриминг аудио с поддержкой перемотки (Range Requests), хранилище MinIO.
 
-## 🛠 Инфраструктура и запуск
+Frontend (Flutter Web): Мобильный дизайн в стиле Spotify, поиск песен, полноэкранный плеер, загрузка собственных треков.
 
-### 1. Подготовка окружения
-Проект разработан для запуска в среде: **Windows + Hyper-V + Ubuntu 24.04**.
-Необходимые инструменты: `minikube`, `kubectl`, `docker`, `flutter`.
+Infrastructure: PostgreSQL для метаданных, MinIO для хранения файлов, всё упаковано в Kubernetes (Minikube).
 
-### 2. Развертывание хранилища и БД
-Перейдите в папку с манифестами и примените их:
+ Быстрый запуск для команды
+1. Предварительные требования
 
-kubectl apply -f k8s/postgres-manifest.yaml
-kubectl apply -f k8s/minio.yaml
+Убедитесь, что у вас установлены:
 
-Наполнение базы:
-Зайдите в под Postgres и создайте таблицу:
+Docker, Minikube, kubectl
 
-kubectl exec -it <postgres-pod-name> -- psql -U admin -d music_db
-# Выполните SQL:
-CREATE TABLE tracks (id SERIAL PRIMARY KEY, title TEXT, artist TEXT, minio_key TEXT);
-INSERT INTO tracks (title, artist, minio_key) VALUES ('Test Song', 'Go Gopher', 'test.mp3');
+Flutter SDK (версия 3.x)
 
-Настройка MinIO:
+2. Запуск инфраструктуры (Бэкенд)
 
-Пробросьте порт консоли: kubectl port-forward service/minio-service 9001:9001
-Зайдите на localhost:9001, создайте бакет music и загрузите файл test.mp3.
+Запустите кластер:
 
-3. Сборка и деплой Бэкенда
-Подключите терминал к Docker внутри Minikube:
-
+code
+Bash
+download
+content_copy
+expand_less
+minikube start
 eval $(minikube docker-env)
-cd services/streaming-service
-CGO_ENABLED=0 GOOS=linux go build -o main main.go
-docker build -t streaming-service:v1 .
-kubectl apply -f ../../k8s/backend-deployment.yaml
 
-4. Запуск мобильного приложения (Flutter)
-Перейдите в папку приложения и запустите веб-версию:
+Соберите бэкенд и разверните в K8s:
 
-cd mobile_app
+code
+Bash
+download
+content_copy
+expand_less
+cd services
+docker build -t streaming-service:latest .
+cd ../k8s
+kubectl apply -f .
+3. Запуск Frontend
+
+Перейдите в папку с приложением:
+
+code
+Bash
+download
+content_copy
+expand_less
+cd ../mobile_app
+
+Установите зависимости:
+
+code
+Bash
+download
+content_copy
+expand_less
 flutter pub get
-flutter run -d chrome --web-hostname 0.0.0.0 --web-port 5000
-Приложение будет доступно по адресу http://<IP_UBUNTU>:5000.
 
-📡 API Endpoints (Backend)
-GET /tracks — Получение списка всех песен в формате JSON.
-GET /stream?key=filename.mp3 — Потоковая передача аудиофайла.
-🛠 Технический стек
-Go 1.22/1.23 (minio-go, lib/pq)
-Kubernetes (Deployments, Services, NodePort, LoadBalancer)
-PostgreSQL 15
-MinIO S3
-Flutter 3.x (just_audio, http)
+Запустите веб-сервер:
+
+code
+Bash
+download
+content_copy
+expand_less
+flutter run -d web-server --web-port 5000 --web-hostname 0.0.0.0
+
+Откройте приложение: http://localhost:5000 (если локально) или по IP вашего сервера.
