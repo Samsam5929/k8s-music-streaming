@@ -1,74 +1,33 @@
- K8s Music Streaming Platform
 
-Микросервисная платформа для стриминга музыки, развернутая в Kubernetes (Minikube).
+# K8s Music Streaming Platform
 
- Что внутри?
+Микросервисная платформа для стриминга музыки, развернутая в **Kubernetes (Minikube)**.
 
-Backend (Go): Управление треками, стриминг аудио с поддержкой перемотки (Range Requests), хранилище MinIO.
+---
 
-Frontend (Flutter Web): Мобильный дизайн в стиле Spotify, поиск песен, полноэкранный плеер, загрузка собственных треков.
+##  Основные компоненты
+* **Backend (Go)**: Управление треками, поддержка `Range Requests` (перемотка), хранилище MinIO.
+* **Frontend (Flutter Web)**: Мобильный дизайн в стиле Spotify, поиск песен, полноэкранный плеер.
+* **Infrastructure**: PostgreSQL, MinIO, Kubernetes.
 
-Infrastructure: PostgreSQL для метаданных, MinIO для хранения файлов, всё упаковано в Kubernetes (Minikube).
+---
 
- Быстрый запуск для команды
-1. Предварительные требования
+##  Быстрый запуск
 
-Убедитесь, что у вас установлены:
+### 1. Инфраструктура
 
-Docker, Minikube, kubectl
-
-Flutter SDK (версия 3.x)
-
-2. Запуск инфраструктуры (Бэкенд)
-
-Запустите кластер:
-
-code
-Bash
-download
-content_copy
-expand_less
 minikube start
 eval $(minikube docker-env)
 
-Соберите бэкенд и разверните в K8s:
+2. Бэкенд
 
-code
-Bash
-download
-content_copy
-expand_less
 cd services
 docker build -t streaming-service:latest .
 cd ../k8s
 kubectl apply -f .
-3. Запуск Frontend
 
-Перейдите в папку с приложением:
+3. Фронтенд
 
-code
-Bash
-download
-content_copy
-expand_less
 cd ../mobile_app
-
-Установите зависимости:
-
-code
-Bash
-download
-content_copy
-expand_less
 flutter pub get
-
-Запустите веб-сервер:
-
-code
-Bash
-download
-content_copy
-expand_less
-flutter run -d web-server --web-port 5000 --web-hostname 0.0.0.0
-
-Откройте приложение: http://localhost:5000 (если локально) или по IP вашего сервера.
+flutter run -d web-server --web-port 5000
